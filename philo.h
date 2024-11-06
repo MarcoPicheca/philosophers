@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:50:05 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/04 20:28:21 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:07:39 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,18 @@
 #define MAX_PHILOS 250
 #define MAX_FORKS 250
 
+typedef struct s_data		t_data;
+
 typedef struct s_philo
 {
+	t_data					*data;
 	unsigned long			death_time;
 	unsigned long			eat_time;
+	unsigned long			last_meal;
+	unsigned long			curr_meal;
 	unsigned long			sleep_time;
-	unsigned long			meals_num;
-	bool					think_state;
+	int						meals_num;
+	int						state;
 	int						th_id;
 	pthread_t				th_philo;
 	pthread_mutex_t			*l_fork;
@@ -61,22 +66,28 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int						philo_num;
+	int						end;
 	int						meals_num;
 	unsigned long			sim_start;
 	unsigned long			death_time;
 	unsigned long			eat_time;
 	unsigned long			sleep_time;
 	t_philo					philos[MAX_PHILOS];
-	pthread_t				*th;
 	pthread_mutex_t			forks[MAX_FORKS];
 	// TODO: da vedere se utile
-	// pthread_mutex_t			lock_in;
+	pthread_mutex_t			lock_in;
 }			t_data;
 
 // checks & init
-long long	ft_atol(const char *str);
-int			ft_atoi(const char *str);
-int			ft_str_isdigit(char *str);
-int			check_args(char **av, int ac, t_data *data);
-void		*routine(void *th);
-int			init_data(t_data *data);
+long long		ft_atol(const char *str);
+int				ft_atoi(const char *str);
+int				ft_str_isdigit(char *str);
+int				check_args(char **av, int ac, t_data *data);
+void			*routine(void *th);
+int				init_forks(t_data *data);
+int				init_philos(t_data *data);
+unsigned long	get_time(void);
+int				print_state(char *str, t_philo *philo, int state);
+void			*routine_sv(void *sv);
+int				ft_usleep(unsigned long time);
+void			ft_exit_rt(t_data *data);

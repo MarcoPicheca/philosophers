@@ -3,7 +3,7 @@ NAME = philosophers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = main.c utils.c
+SRC = main.c utils.c timing.c supervisor.c
 
 OBJECTS = $(SRC:.c=.o)
 

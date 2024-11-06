@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:01:41 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/04 17:21:12 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/05 12:08:06 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,17 @@ unsigned	long	get_time(void)
 
 	res = 0;
 	if (gettimeofday(&tv, NULL))
-		return (error("Error gettimeofday()\n", NULL));
+		return (printf("Error gettimeofday()\n"), 0);
 	res = (tv.tv_sec * (unsigned long)1000) + (tv.tv_usec / 1000);
 	return (res);
+}
+
+int	ft_usleep(unsigned long time)
+{
+	unsigned long	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(time / 10);
+	return(0);
 }
