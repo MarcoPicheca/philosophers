@@ -6,12 +6,12 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:50:05 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/06 13:07:39 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:02:26 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOS_H
-# define PHILOS_H
+#ifndef PHILO_H
+# define PHILO_H
 #endif
 #include <stdbool.h>
 #include <stdlib.h>
@@ -40,27 +40,39 @@
 #define SLEEPING	"is sleeping"
 #define EATING		"is eating"
 #define DIED		"died"
-#define MAX_PHILOS 250
-#define MAX_FORKS 250
+#define MAX_PHILOS 200
+#define MAX_FORKS 200
 
 typedef struct s_data		t_data;
+
+typedef struct s_forks
+{
+	pthread_mutex_t			fork;
+	int						id;
+}				t_forks;
 
 typedef struct s_philo
 {
 	t_data					*data;
-	unsigned long			death_time;
 	unsigned long			eat_time;
 	unsigned long			last_meal;
-	unsigned long			curr_meal;
 	unsigned long			sleep_time;
 	int						meals_num;
 	int						state;
 	int						th_id;
 	pthread_t				th_philo;
-	pthread_mutex_t			*l_fork;
-	pthread_mutex_t			*r_fork;
+	t_forks					*r_fork;
+	t_forks					*l_fork;
 	pthread_mutex_t			lock;
+	pthread_mutex_t			lock_2;
+	pthread_mutex_t			check_lock;
 }			t_philo;
+
+typedef struct s_visor
+{
+	t_data					*data;
+	pthread_t				sv;
+}				t_visor;
 
 //TODO: aggiungere un mutex per stampa e general lock
 typedef struct s_data
@@ -72,10 +84,13 @@ typedef struct s_data
 	unsigned long			death_time;
 	unsigned long			eat_time;
 	unsigned long			sleep_time;
+	t_visor					supervisor[0];
 	t_philo					philos[MAX_PHILOS];
-	pthread_mutex_t			forks[MAX_FORKS];
-	// TODO: da vedere se utile
+	t_forks					forks[MAX_FORKS];
 	pthread_mutex_t			lock_in;
+	pthread_mutex_t			lock_sv;
+	pthread_mutex_t			lock_end;
+	pthread_mutex_t			lock_print;
 }			t_data;
 
 // checks & init
@@ -83,11 +98,12 @@ long long		ft_atol(const char *str);
 int				ft_atoi(const char *str);
 int				ft_str_isdigit(char *str);
 int				check_args(char **av, int ac, t_data *data);
-void			*routine(void *th);
-int				init_forks(t_data *data);
-int				init_philos(t_data *data);
 unsigned long	get_time(void);
-int				print_state(char *str, t_philo *philo, int state);
-void			*routine_sv(void *sv);
+int				print_state(char *str, t_philo *philo, t_data *data);
+int				init_ph_fk(t_data *data);
 int				ft_usleep(unsigned long time);
-void			ft_exit_rt(t_data *data);
+int				ft_putnbr_len(int n);
+unsigned long	ft_unsigned_l(unsigned long nbr);
+int				ft_putchar_len(int c);
+int				start_routine(t_data *data);
+int				ft_putstr_len(char *str);

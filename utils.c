@@ -6,11 +6,34 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:10:01 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/04 16:25:01 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/11 09:28:07 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// Serve per la stampa del tempo
+unsigned	long	get_time(void)
+{
+	struct timeval	tv;
+	unsigned long	res;
+
+	res = 0;
+	if (gettimeofday(&tv, NULL))
+		return (printf("Error gettimeofday()\n"), 0);
+	res = (tv.tv_sec * (unsigned long)1000) + (tv.tv_usec / 1000);
+	return (res);
+}
+
+int	ft_usleep(unsigned long time)
+{
+	unsigned long	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(time / 10);
+	return(0);
+}
 
 long long	ft_atol(const char *str)
 {
