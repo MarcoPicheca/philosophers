@@ -86,6 +86,12 @@ static	void	*one_philo(void *dt)
 
 int	init_ph_fk(t_data *data)
 {
+	if (pthread_mutex_init(&data->lock_print, NULL))
+		return (printf("Problems mutex init lock sv\n"));
+	if (pthread_mutex_init(&data->lock_check, NULL))
+		return (printf("Problems mutex init lock sv\n"));
+	if (pthread_mutex_init(&data->lock_end, NULL))
+		return (printf("Problems mutex init lock end\n"));
 	if (init_forks(data))
 		return (1);
 	if (init_philos(data))
@@ -96,14 +102,6 @@ int	init_ph_fk(t_data *data)
 		pthread_join(data->philos[0].th_philo, NULL);
 		return(0);
 	}
-	if (pthread_mutex_init(&data->lock_in, NULL))
-		return (printf("Problems mutex init lock in\n"));
-	if (pthread_mutex_init(&data->lock_sv, NULL))
-		return (printf("Problems mutex init lock sv\n"));
-	if (pthread_mutex_init(&data->lock_print, NULL))
-		return (printf("Problems mutex init lock sv\n"));
-	if (pthread_mutex_init(&data->lock_end, NULL))
-		return (printf("Problems mutex init lock end\n"));
 	data->supervisor[0].data = data;
 	return (0);
 }

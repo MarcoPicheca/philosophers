@@ -87,10 +87,9 @@ typedef struct s_data
 	t_visor					supervisor[0];
 	t_philo					philos[MAX_PHILOS];
 	t_forks					forks[MAX_FORKS];
-	pthread_mutex_t			lock_in;
-	pthread_mutex_t			lock_sv;
 	pthread_mutex_t			lock_end;
 	pthread_mutex_t			lock_print;
+	pthread_mutex_t			lock_check;
 }			t_data;
 
 // checks & init

@@ -10,10 +10,10 @@ OBJECTS = $(SRC:.c=.o)
 all: $(NAME)
 
 %.o : %.c
-	@echo "compiling..."
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
 $(NAME): $(OBJECTS)
+	@echo "compiling..."
 	@$(CC) $(CFLAGS) -lpthread $(OBJECTS) -o $(NAME)
 
 clean:

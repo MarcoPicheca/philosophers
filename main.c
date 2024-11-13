@@ -16,13 +16,12 @@ int	check_args(char **av, int ac, t_data *data)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	memset(data, 0, sizeof(t_data));
-	while (i < ac)
+	while (++i < ac)
 	{
 		if (ft_str_isdigit(av[i]))
 			return (1);
-		i++;
 	}
 	data->philo_num = ft_atoi(av[1]);
 	data->death_time = (unsigned long)ft_atol(av[2]);
