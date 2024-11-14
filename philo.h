@@ -84,7 +84,7 @@ typedef struct s_data
 	unsigned long			death_time;
 	unsigned long			eat_time;
 	unsigned long			sleep_time;
-	t_visor					supervisor[0];
+	t_visor					supervisor[1];
 	t_philo					philos[MAX_PHILOS];
 	t_forks					forks[MAX_FORKS];
 	pthread_mutex_t			lock_end;

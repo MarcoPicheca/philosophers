@@ -102,6 +102,7 @@ int	init_ph_fk(t_data *data)
 		pthread_join(data->philos[0].th_philo, NULL);
 		return(0);
 	}
-	data->supervisor[0].data = data;
+	memset(&data->supervisor[1], 0, sizeof(t_visor));
+	data->supervisor[1].data = data;
 	return (0);
 }

@@ -60,6 +60,9 @@ void	eating(t_philo *philo, t_data *data)
 	print_state(TAKE_FORKS, philo, data);
 	// pthread_mutex_unlock(&data->lock_check);
 	print_state(EATING, philo, data);
+	pthread_mutex_lock(&philo->lock);
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(&philo->lock);
 	ft_usleep(data->eat_time);
 	///////////
 	// pthread_mutex_lock(&data->lock_check);
@@ -77,7 +80,6 @@ void	eating(t_philo *philo, t_data *data)
 	pthread_mutex_lock(&philo->lock);
 	///////////
 	philo->meals_num--;
-	philo->last_meal = get_time();
 	if (philo->meals_num == 0)
 		philo->state = 1;
 	pthread_mutex_unlock(&philo->lock);
@@ -138,31 +140,42 @@ void	sleeping(t_philo *philo, t_data *data)
 void	*routine(void *dt)
 {
 	t_philo	*philo;
-	//int		flag;
+	// int		flag;
 	// Debug i 
 	//int		i = 0;
 	t_data	*data;
 
 	philo = (t_philo *)dt;
 	data = philo->data;
-	//flag = 0;
+	// flag = 0;
 	// pthread_mutex_lock(&philo->lock);
 	philo->last_meal = data->sim_start;
 	// pthread_mutex_unlock(&philo->lock);
-	while (data->end != 1 && philo->state != 1)
+	while (philo->state != 1)
 	{
-		// if (flag == 1)
-		// 	pthread_mutex_unlock(&data->lock_end);
+		pthread_mutex_lock(&data->lock_end);
+		if (data->end == 1)
+		{
+			pthread_mutex_unlock(&data->lock_end);
+			return (NULL);
+		}
+		pthread_mutex_unlock(&data->lock_end);
 		pthread_mutex_lock(&data->lock_end);
 		ft_usleep(1);
 		eating(philo, data);
 		if (data->end == 1)
+		{
+			pthread_mutex_unlock(&data->lock_end);
 			return (NULL);
+		}
 		pthread_mutex_unlock(&data->lock_end);
 		// ft_usleep(1);
 		pthread_mutex_lock(&data->lock_end);
 		if (data->end == 1)
+		{
+			pthread_mutex_unlock(&data->lock_end);
 			return (NULL);
+		}
 		pthread_mutex_unlock(&data->lock_end);
 		sleeping(philo, data);
 		ft_usleep(1);
@@ -181,28 +194,31 @@ static	void	*routine_sv(void *dt)
 	data = (t_data *)dt;
 	while (1 && data->end != 1)
 	{
-		ft_usleep(1);
-		if (data->philos[i].th_id == 0)
-			continue ;
+		ft_usleep(5);
+		pthread_mutex_lock(&data->lock_end);
+		if (data->end != 1 && data->philos[i].th_id == 0)
+			i = 1;
+		pthread_mutex_unlock(&data->lock_end);
+
 		pthread_mutex_lock(&data->lock_end);
 		if ((data->philos[i].meals_num == 0 || data->philos[i].state == 1)
 			&& (get_time() - data->philos[i].last_meal) > data->death_time)
 		{
-			
+			// pthread_mutex_lock(&data->lock_end);
 			data->end = 1;
 			pthread_mutex_unlock(&data->lock_end);
-			// ft_putstr_len("porca madonna\n");
+			// pthread_mutex_unlock(&data->lock_end);
+			// ft_putstr_len(CYAN"porca madonna\n");
 			pthread_mutex_lock(&data->philos[i].lock);
 			print_state(DIED, &data->philos[i], data);
-			break ;
-			// printf(RED"routine sv %d\n", i);
 			pthread_mutex_unlock(&data->philos[i].lock);
+			return (NULL);
 		}
 		pthread_mutex_unlock(&data->lock_end);
 		if (i < data->philo_num)
 			i++;
-		else
-			i = 1;
+		else if (data->end == 1)
+			return (NULL);
 	}
 	return (NULL);
 }
@@ -217,7 +233,7 @@ int	start_routine(t_data *data)
 	{
 		if (i == data->philo_num)
 		{
-			if (pthread_create(&data->supervisor->sv, NULL, routine_sv, data))
+			if (pthread_create(&data->supervisor[1].sv, NULL, routine_sv, data))
 				return (ft_putstr_len("Problems in creating a thread\n"));
 		}
 		else if (i < data->philo_num && pthread_create(&data->philos[i].th_philo, NULL, routine, &data->philos[i]))
@@ -230,6 +246,9 @@ int	start_routine(t_data *data)
 		if (pthread_join(data->philos[i].th_philo, NULL))
 			return (ft_putstr_len("Problems in joining a thread\n"));
 	}
+	// ft_putstr_len(GREEN"sono qua\n");
+	if (pthread_join(data->supervisor[1].sv, NULL))
+		return (ft_putstr_len("Problems in joining a thread\n"));
 	exit (0);
 	// exit_th(data);
 	return (0);
