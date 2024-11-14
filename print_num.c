@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:22:53 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/12 18:09:28 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:49:33 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,7 @@ int	print_state(char *str, t_philo *philo, t_data *data)
 {
 	unsigned long	time;
 
-	
 	pthread_mutex_lock(&data->lock_print);
-	if (philo->th_id == 0)
-		return (ft_putstr_len("coglione\n"));
-	// printf(RED"ciao %lu\nciao %lu\n"RESET, data->eat_time, philo->eat_time);
-	ft_usleep(1);
 	time = get_time() - data->sim_start;
 	ft_unsigned_l(time);
 	ft_putchar_len(' ');

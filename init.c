@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:16:18 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/12 17:11:48 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:17:55 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	init_ph_fk(t_data *data)
 		pthread_join(data->philos[0].th_philo, NULL);
 		return(0);
 	}
-	memset(&data->supervisor[1], 0, sizeof(t_visor));
-	data->supervisor[1].data = data;
+	memset(&data->supervisor[0], 0, sizeof(t_visor));
+	data->supervisor[0].data = data;
 	return (0);
 }
