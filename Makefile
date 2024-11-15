@@ -3,7 +3,8 @@ NAME = philosophers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = main.c utils.c print_num.c init.c routine.c
+SRC = main.c utils.c print_num.c init.c routine.c \
+		sleep.c eating.c routine_sv.c \
 
 OBJECTS = $(SRC:.c=.o)
 

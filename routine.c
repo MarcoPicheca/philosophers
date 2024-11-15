@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 17:56:18 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/14 19:22:16 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:28:30 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,101 +28,19 @@ int	check_state(t_data *data, t_philo *philo)
 	return (0);
 }
 
-void	eating(t_philo *philo, t_data *data)
+int	check_end(t_data *data, t_philo *philo)
 {
+	printf("\r");
+	printf("\r");
+	printf("\r");
 	pthread_mutex_lock(&data->lock_end);
 	if (data->end == 1 || philo->state == 1)
 	{
 		pthread_mutex_unlock(&data->lock_end);
-		return ;
+		return (1);
 	}
 	pthread_mutex_unlock(&data->lock_end);
-	if (check_state(data, philo))
-	{
-		sleep (1);
-		printf(RED"ciao eat"RESET"\n");
-		return ;
-	}
-	if (philo->l_fork->id < philo->r_fork->id)
-	{
-		pthread_mutex_lock(&philo->l_fork->fork);
-		pthread_mutex_lock(&philo->r_fork->fork);
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->r_fork->fork);
-		pthread_mutex_lock(&philo->l_fork->fork);
-	}
-	pthread_mutex_lock(&data->lock_end);
-	if (data->end == 1 || philo->state == 1)
-	{
-		if (philo->l_fork->id < philo->r_fork->id)
-		{
-			pthread_mutex_unlock(&philo->r_fork->fork);
-			pthread_mutex_unlock(&philo->l_fork->fork);
-		}
-		else
-		{
-			pthread_mutex_unlock(&philo->l_fork->fork);
-			pthread_mutex_unlock(&philo->r_fork->fork);
-		}
-		pthread_mutex_unlock(&data->lock_end);
-		return ;
-	}
-	pthread_mutex_unlock(&data->lock_end);
-	print_state(TAKE_FORKS, philo, data);
-	print_state(TAKE_FORKS, philo, data);
-	pthread_mutex_lock(&philo->lock);
-	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->lock);
-	print_state(EATING, philo, data);
-	ft_usleep(data->eat_time);
-	if (philo->l_fork->id < philo->r_fork->id)
-	{
-		pthread_mutex_unlock(&philo->r_fork->fork);
-		pthread_mutex_unlock(&philo->l_fork->fork);
-	}
-	else
-	{
-		pthread_mutex_unlock(&philo->l_fork->fork);
-		pthread_mutex_unlock(&philo->r_fork->fork);
-	}
-	pthread_mutex_lock(&philo->lock);
-	philo->meals_num--;
-	pthread_mutex_unlock(&philo->lock);
-	pthread_mutex_lock(&philo->lock);
-	if (philo->meals_num == 0)
-		philo->state = 1;
-	pthread_mutex_unlock(&philo->lock);
-}
-
-void	sleeping(t_philo *philo, t_data *data)
-{
-	pthread_mutex_lock(&data->lock_end);
-	pthread_mutex_lock(&philo->lock_2);
-	if (data->end == 1 || philo->state == 1)
-	{
-		pthread_mutex_unlock(&philo->lock_2);
-		pthread_mutex_unlock(&data->lock_end);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->lock_2);
-	pthread_mutex_unlock(&data->lock_end);
-	if (check_state(data, philo))
-	{
-		printf(RED"ciao sleep"RESET"\n");
-		return ;
-	}
-	print_state(SLEEPING, philo, data);
-	ft_usleep(data->sleep_time);
-	pthread_mutex_lock(&data->lock_end);
-	if (data->end == 1 || philo->state == 1)
-	{
-		pthread_mutex_unlock(&data->lock_end);
-		return ;
-	}
-	pthread_mutex_unlock(&data->lock_end);
-	print_state(THINKING, philo, data);
+	return (0);
 }
 
 void	*routine(void *dt)
@@ -132,88 +50,34 @@ void	*routine(void *dt)
 
 	philo = (t_philo *)dt;
 	data = philo->data;
-	while (1 && data->end != 1 && philo->state != 1)
+	while (data->end != 1 && philo->state != 1)
 	{
 		usleep(1);
-		pthread_mutex_lock(&data->lock_end);
-		if (data->end == 1 || philo->state == 1)
-		{
-			pthread_mutex_unlock(&data->lock_end);
+		if (check_end(data, philo))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&data->lock_end);
 		eating(philo, data);
-		pthread_mutex_lock(&data->lock_end);
-		printf(RED"ciao eat"RESET"\n");
-		if (data->end == 1 || philo->state == 1)
-		{
-			pthread_mutex_unlock(&data->lock_end);
+		if (check_end(data, philo))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&data->lock_end);
-		pthread_mutex_lock(&data->lock_end);
-		if (data->end == 1 || philo->state == 1)
-		{
-			pthread_mutex_unlock(&data->lock_end);
+		if (check_end(data, philo))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&data->lock_end);
 		sleeping(philo, data);
 	}
 	return (NULL);
 }
 
-static	void	*routine_sv(void *dt)
+static	int	start_routine2(t_data *data, int i)
 {
-	t_data			*data;
-	static int		i;
-	
-	i = 1;
-	data = (t_data *)dt;
-	while (1)
+	data->philos[i].last_meal = data->sim_start;
+	if (i == data->philo_num)
 	{
-		usleep(1);
-		pthread_mutex_lock(&data->lock_end);
-		if (data->philos[i].th_id == 0)
-			i = 1;
-		pthread_mutex_unlock(&data->lock_end);
-		pthread_mutex_lock(&data->lock_end);
-		if (data->end == 1)
-			return (NULL);
-		pthread_mutex_unlock(&data->lock_end);
-		pthread_mutex_lock(&data->philos[i].lock);
-		pthread_mutex_lock(&data->lock_end);
-		if (data->philos[i].meals_num != 0 &&
-			(get_time() - data->philos[i].last_meal) > data->death_time)
-		{
-			data->philos[i].state = 1;
-			data->end = 1;
-			// ft_putstr_len(GREEN"porco dio\n"RESET"");
-			pthread_mutex_unlock(&data->lock_end);
-			print_state(DIED, &data->philos[i], data);
-			pthread_mutex_unlock(&data->philos[i].lock);
-			return (NULL);
-		}
-		pthread_mutex_unlock(&data->lock_end);
-		pthread_mutex_unlock(&data->philos[i].lock);
-		pthread_mutex_lock(&data->philos[i].lock);
-		if (data->philos[i].meals_num == 0)
-		{
-			// ft_putstr_len(GREEN"sono qui"RESET"");
-			// ft_putnbr_len(data->philos[i].th_id);
-			// ft_putchar_len('\n');
-			data->philos[i].state = 1;
-			pthread_mutex_unlock(&data->philos[i].lock);
-			return (NULL);
-			// pthread_mutex_lock(&data->lock_end);
-			// pthread_mutex_unlock(&data->lock_end);
-			// ft_putstr_len(CYAN"porca madonna\n");
-		}
-		pthread_mutex_unlock(&data->philos[i].lock);
-		if (i < data->philo_num)
-			i++;
+		if (pthread_create(&data->supervisor[0].sv, NULL, routine_sv, data))
+			return (1);
 	}
-	return (NULL);
+	else if (i < data->philo_num
+		&& pthread_create(&data->philos[i].th_philo
+			, NULL, routine, &data->philos[i]))
+		return (1);
+	return (0);
 }
 
 int	start_routine(t_data *data)
@@ -224,26 +88,19 @@ int	start_routine(t_data *data)
 	data->sim_start = get_time();
 	while (++i <= data->philo_num)
 	{
-		data->philos[i].last_meal = data->sim_start;
-		if (i == data->philo_num)
-		{
-			if (pthread_create(&data->supervisor[0].sv, NULL, routine_sv, data))
-				return (ft_putstr_len("Problems in creating a thread\n"));
-		}
-		else if (i < data->philo_num && pthread_create(&data->philos[i].th_philo, NULL, routine, &data->philos[i]))
+		if (start_routine2(data, i))
 			return (ft_putstr_len("Problems in creating a thread\n"));
 	}
 	i = -1;
 	while (++i < data->philo_num)
 	{
-		//printf("start routine join %d\n", i);
+		// print_state(DIED, &data->philos[i], data);
+		// printf("thread %d, %d\n", data->philos[i].th_id, i);
 		if (pthread_join(data->philos[i].th_philo, NULL))
 			return (ft_putstr_len("Problems in joining a thread\n"));
 	}
-	// ft_putstr_len(GREEN"sono qua\n");
+	printf("thread sv %d\n", i);
 	if (pthread_join(data->supervisor[0].sv, NULL))
 		return (ft_putstr_len("Problems in joining a thread\n"));
-	exit (0);
-	// exit_th(data);
 	return (0);
 }

@@ -3,45 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:50:05 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/12 17:02:26 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:59:07 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-#endif
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <pthread.h>
-#include <sys/time.h>
-#include <stddef.h>
+# include <stdbool.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdint.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <stddef.h>
 
 // Colors for print
-#define RESET		"\x1b[0m"	// Reset colore
-#define BLACK		"\x1b[30m"	// Nero
-#define RED			"\x1b[31m"	// Rosso
-#define GREEN		"\x1b[32m"	// Verde
-#define YELLOW		"\x1b[33m"	// Giallo
-#define BLUE		"\x1b[34m"	// Blu
-#define MAGENTA		"\x1b[35m"	// Magenta
-#define CYAN		"\x1b[36m"	// Ciano
-#define WHITE		"\x1b[37m"	// Bianco
+# define RESET		"\x1b[0m"	// Reset colore
+# define BLACK		"\x1b[30m"	// Nero
+# define RED			"\x1b[31m"	// Rosso
+# define GREEN		"\x1b[32m"	// Verde
+# define YELLOW		"\x1b[33m"	// Giallo
+# define BLUE		"\x1b[34m"	// Blu
+# define MAGENTA		"\x1b[35m"	// Magenta
+# define CYAN		"\x1b[36m"	// Ciano
+# define WHITE		"\x1b[37m"	// Bianco
 
 // Print messages
-#define TAKE_FORKS	"has taken a fork"
-#define THINKING	"is thinking"
-#define SLEEPING	"is sleeping"
-#define EATING		"is eating"
-#define DIED		"died"
-#define MAX_PHILOS 200
-#define MAX_FORKS 200
+# define TAKE_FORKS	"has taken a fork"
+# define THINKING	"is thinking"
+# define SLEEPING	"is sleeping"
+# define EATING		"is eating"
+# define DIED		"died"
+# define MAX_PHILOS 200
+# define MAX_FORKS 200
 
 typedef struct s_data		t_data;
 
@@ -92,7 +91,6 @@ typedef struct s_data
 	pthread_mutex_t			lock_check;
 }			t_data;
 
-// checks & init
 long long		ft_atol(const char *str);
 int				ft_atoi(const char *str);
 int				ft_str_isdigit(char *str);
@@ -106,3 +104,10 @@ unsigned long	ft_unsigned_l(unsigned long nbr);
 int				ft_putchar_len(int c);
 int				start_routine(t_data *data);
 int				ft_putstr_len(char *str);
+void			sleeping(t_philo *philo, t_data *data);
+void			eating(t_philo *philo, t_data *data);
+void			*routine_sv(void *dt);
+int				check_state(t_data *data, t_philo *philo);
+int				check_end(t_data *data, t_philo *philo);
+
+#endif

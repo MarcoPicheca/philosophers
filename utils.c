@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:10:01 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/11 09:28:07 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:27:50 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_usleep(unsigned long time)
 	start = get_time();
 	while ((get_time() - start) < time)
 		usleep(time / 10);
-	return(0);
+	return (0);
 }
 
 long long	ft_atol(const char *str)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:16:18 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/14 17:17:55 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:27:38 by marco            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	init_forks(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < data->philo_num)
@@ -29,7 +29,7 @@ int	init_forks(t_data *data)
 
 static	int	init_num(t_data *data, int i)
 {
-	data->philos[i].eat_time = data->eat_time; 
+	data->philos[i].eat_time = data->eat_time;
 	data->philos[i].sleep_time = data->sleep_time;
 	data->philos[i].meals_num = data->meals_num;
 	if (pthread_mutex_init(&data->philos[i].lock, NULL))
@@ -48,7 +48,7 @@ int	init_philos(t_data *data)
 
 	i = -1;
 	num = 1;
-	while (++i < data->philo_num)	
+	while (++i < data->philo_num)
 	{
 		if (init_num(data, i))
 			return (1);
@@ -100,7 +100,7 @@ int	init_ph_fk(t_data *data)
 	{
 		pthread_create(&data->philos[0].th_philo, NULL, one_philo, data);
 		pthread_join(data->philos[0].th_philo, NULL);
-		return(0);
+		return (0);
 	}
 	memset(&data->supervisor[0], 0, sizeof(t_visor));
 	data->supervisor[0].data = data;
