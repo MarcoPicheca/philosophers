@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   eating.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:27:28 by marco             #+#    #+#             */
-/*   Updated: 2024/11/15 13:06:38 by marco            ###   ########.fr       */
+/*   Updated: 2024/11/15 15:17:30 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 static	int	lock_fk_check(t_data *data, t_philo *philo)
 {

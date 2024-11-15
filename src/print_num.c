@@ -6,11 +6,11 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:22:53 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/14 17:49:33 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:17:46 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 int	ft_putnbr_len(int n)
 {

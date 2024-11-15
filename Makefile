@@ -3,8 +3,8 @@ NAME = philosophers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = main.c utils.c print_num.c init.c routine.c \
-		sleep.c eating.c routine_sv.c \
+SRC = src/main.c utils/utils.c src/print_num.c src/init.c src/routine.c \
+		src/sleep.c src/eating.c src/routine_sv.c \
 
 OBJECTS = $(SRC:.c=.o)
 
@@ -15,9 +15,10 @@ all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	@echo "compiling..."
-	@$(CC) $(CFLAGS) -lpthread $(OBJECTS) -o $(NAME)
+	@$(CC) $(CFLAGS) -lpthread $(OBJECTS) -o $(NAME) -s
 
 clean:
+	@echo "cleaning..."
 	@rm -rf $(OBJECTS)
 
 fclean: clean

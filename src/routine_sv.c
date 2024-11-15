@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   routine_sv.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:31:30 by marco             #+#    #+#             */
-/*   Updated: 2024/11/15 12:25:21 by marco            ###   ########.fr       */
+/*   Updated: 2024/11/15 18:04:59 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 static	int	check_philo_sv(t_data *data, int i)
 {
@@ -37,11 +37,11 @@ void	*routine_sv(void *dt)
 	static int		i = 0;
 
 	data = (t_data *)dt;
-	while (++i)
+	while (1)
 	{
 		usleep(1);
-		if (data->philos[i].th_id == 0)
-			i = 1;
+		if (i >= data->philo_num)
+			i = 0;
 		pthread_mutex_lock(&data->lock_end);
 		if (data->end == 1)
 			return (NULL);
@@ -56,6 +56,7 @@ void	*routine_sv(void *dt)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&data->philos[i].lock);
+		i++;
 	}
 	return (NULL);
 }

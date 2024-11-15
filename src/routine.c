@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 17:56:18 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/15 13:28:30 by marco            ###   ########.fr       */
+/*   Updated: 2024/11/15 18:01:34 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 int	check_state(t_data *data, t_philo *philo)
 {
@@ -30,9 +30,6 @@ int	check_state(t_data *data, t_philo *philo)
 
 int	check_end(t_data *data, t_philo *philo)
 {
-	printf("\r");
-	printf("\r");
-	printf("\r");
 	pthread_mutex_lock(&data->lock_end);
 	if (data->end == 1 || philo->state == 1)
 	{
@@ -92,15 +89,12 @@ int	start_routine(t_data *data)
 			return (ft_putstr_len("Problems in creating a thread\n"));
 	}
 	i = -1;
+	if (pthread_join(data->supervisor[0].sv, NULL))
+		return (ft_putstr_len("Problems in joining a thread\n"));
 	while (++i < data->philo_num)
 	{
-		// print_state(DIED, &data->philos[i], data);
-		// printf("thread %d, %d\n", data->philos[i].th_id, i);
 		if (pthread_join(data->philos[i].th_philo, NULL))
 			return (ft_putstr_len("Problems in joining a thread\n"));
 	}
-	printf("thread sv %d\n", i);
-	if (pthread_join(data->supervisor[0].sv, NULL))
-		return (ft_putstr_len("Problems in joining a thread\n"));
 	return (0);
 }

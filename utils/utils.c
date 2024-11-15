@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:10:01 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/15 12:27:50 by marco            ###   ########.fr       */
+/*   Updated: 2024/11/15 18:13:32 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
-// Serve per la stampa del tempo
 unsigned	long	get_time(void)
 {
 	struct timeval	tv;
@@ -31,7 +30,7 @@ int	ft_usleep(unsigned long time)
 
 	start = get_time();
 	while ((get_time() - start) < time)
-		usleep(time / 10);
+		usleep(100);
 	return (0);
 }
 

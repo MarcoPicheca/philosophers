@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marco <marco@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:25:35 by marco             #+#    #+#             */
-/*   Updated: 2024/11/15 13:17:37 by marco            ###   ########.fr       */
+/*   Updated: 2024/11/15 15:17:56 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 void	sleeping(t_philo *philo, t_data *data)
 {

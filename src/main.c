@@ -6,11 +6,11 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:05:53 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/12 17:01:22 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:17:43 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 int	check_args(char **av, int ac, t_data *data)
 {
