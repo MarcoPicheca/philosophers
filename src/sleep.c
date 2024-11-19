@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:25:35 by marco             #+#    #+#             */
-/*   Updated: 2024/11/15 15:17:56 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:16:12 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	sleeping(t_philo *philo, t_data *data)
 	pthread_mutex_unlock(&data->lock_end);
 	if (check_state(data, philo))
 		return ;
-	print_state(SLEEPING, philo, data);
+	if (!check_end(data, philo))
+		print_state(SLEEPING, philo, data);
 	ft_usleep(data->sleep_time);
 	if (check_end(data, philo))
 		return ;
-	print_state(THINKING, philo, data);
+	if (!check_end(data, philo))
+		print_state(THINKING, philo, data);
 }

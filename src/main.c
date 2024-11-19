@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:05:53 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/15 15:17:43 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:13:19 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int ac, char **av)
 		return (printf("Problems in args\n"));
 	if (init_ph_fk(&data))
 		return (printf("Problems in init_ph_fk\n"));
-	if (start_routine(&data))
+	if (data.philo_num != 1 && start_routine(&data))
 		return (1);
 	return (0);
 }

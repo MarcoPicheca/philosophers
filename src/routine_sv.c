@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:31:30 by marco             #+#    #+#             */
-/*   Updated: 2024/11/15 18:04:59 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:24:18 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static	int	check_philo_sv(t_data *data, int i)
 {
 	pthread_mutex_lock(&data->philos[i].lock);
 	pthread_mutex_lock(&data->lock_end);
-	if (data->philos[i].meals_num != 0
-		&& (get_time() - data->philos[i].last_meal) > data->death_time)
+	if ((get_time() - data->philos[i].last_meal) > data->death_time)
 	{
 		data->philos[i].state = 1;
 		data->end = 1;
@@ -39,7 +38,6 @@ void	*routine_sv(void *dt)
 	data = (t_data *)dt;
 	while (1)
 	{
-		usleep(1);
 		if (i >= data->philo_num)
 			i = 0;
 		pthread_mutex_lock(&data->lock_end);

@@ -6,7 +6,7 @@
 /*   By: mapichec <mapichec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 17:56:18 by mapichec          #+#    #+#             */
-/*   Updated: 2024/11/15 18:01:34 by mapichec         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:47:20 by mapichec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,15 @@ void	*routine(void *dt)
 	t_data	*data;
 
 	philo = (t_philo *)dt;
+	if (philo->th_id % 2 != 0)
+		ft_usleep(10);
 	data = philo->data;
-	while (data->end != 1 && philo->state != 1)
+	while (!check_end(data, philo))
 	{
-		usleep(1);
-		if (check_end(data, philo))
-			return (NULL);
 		eating(philo, data);
-		if (check_end(data, philo))
-			return (NULL);
-		if (check_end(data, philo))
-			return (NULL);
 		sleeping(philo, data);
+		if (check_end(data, philo))
+			return (NULL);
 	}
 	return (NULL);
 }
